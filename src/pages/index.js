@@ -28,6 +28,9 @@ const cardsForm = document.forms['new-place']; //форма добавления
 const inputPlace = cardsForm.querySelector('.popup__input_type_card-name'); //инпут имени места
 const inputLink = cardsForm.querySelector('.popup__input_type_url'); //инпут ссылки места
 
+const img = popupTypeImage.querySelector('.popup__image'); 
+const title = popupTypeImage.querySelector('.popup__caption');
+
 //добавляем карточку в DOM
 function addCard (cardElement){
     placesItem.append(cardElement);
@@ -57,8 +60,8 @@ function openPopupNewCard() {
 
 //функция открытия попапа изображения
 function openPopupTypeImage(imageSrc, imageTitle) {
-    const img = popupTypeImage.querySelector('.popup__image'); 
-    const title = popupTypeImage.querySelector('.popup__caption');
+    // const img = popupTypeImage.querySelector('.popup__image'); 
+    // const title = popupTypeImage.querySelector('.popup__caption');
 
     img.src = imageSrc; //в ссылку картинки присваиваем ссылку из аргумента
     img.alt = imageTitle; //в альт помещаем название картинки из аргумента
@@ -75,7 +78,7 @@ closePopupButtons.forEach(function(item) {
 })
 
 //функция работы с сабмитом редактирования профиля
-function handleFormSubmit(evt) {
+function submitEditProfileForm(evt) {
     evt.preventDefault();
 
     profileName.textContent = inputName.value;
@@ -91,21 +94,21 @@ function addNewCards(cardData, deletHandler, likeHandler) {
 }
 
 //функция работы с сабмитом новой карточки
-function newCardFormSubmit(evt) {
+function submitAddCardForm(evt) {
     evt.preventDefault();
 
-    const objNewCard = {
+    const cardData = {
         name: inputPlace.value,
         link: inputLink.value
     }
 
-    addNewCards(objNewCard, deleteCard, likeCards);
+    addNewCards(cardData, deleteCard, likeCards);
     closePopups(popupNewCard);
 
     cardsForm.reset();
 };
 
-cardsForm.addEventListener('submit', newCardFormSubmit); //слушатель формы отправки сабмита новой карточки
+cardsForm.addEventListener('submit', submitAddCardForm); //слушатель формы отправки сабмита новой карточки
 placeAddButton.addEventListener('click', openPopupNewCard); //слушатель попапа создания новой карточки
-profileForm.addEventListener('submit', handleFormSubmit); //слушатель события сабмита для редактирования профиля
+profileForm.addEventListener('submit', submitEditProfileForm); //слушатель события сабмита для редактирования профиля
 profileEditButton.addEventListener('click', openPopupTypeEdit); // слушатель открытия попапа редактирования профиля

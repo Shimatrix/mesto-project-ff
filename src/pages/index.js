@@ -60,9 +60,6 @@ function openPopupNewCard() {
 
 //функция открытия попапа изображения
 function openPopupTypeImage(imageSrc, imageTitle) {
-    // const img = popupTypeImage.querySelector('.popup__image'); 
-    // const title = popupTypeImage.querySelector('.popup__caption');
-
     img.src = imageSrc; //в ссылку картинки присваиваем ссылку из аргумента
     img.alt = imageTitle; //в альт помещаем название картинки из аргумента
     title.textContent = imageTitle; //в текст под картинкой вставляем аргумент с названием 

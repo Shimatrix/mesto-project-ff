@@ -3,6 +3,18 @@ import {initialCards} from '../scripts/constants.js';
 import {createCard, deleteCard, likeCards} from '../components/card.js';
 import {openPopups, closePopups, closePopupsOverlay} from '../components/modal.js';
 
+import {enableValidation, clearValidation} from '../components/validation.js'
+
+// Вызовем функцию валидации
+enableValidation({
+    formSelector: ".popup__form",
+    inputSelector: ".popup__input",
+    submitButtonSelector: ".popup__button",
+    inactiveButtonClass: "popup__button_disabled",
+    inputErrorClass: "popup__input_type_error",
+    errorClass: "popup__error_visible"
+  });
+  
 export const templateCards = document.querySelector('#card-template').content; //помещаем темплейт в переменную
 const placesItem = document.querySelector('.places__list'); //сохраняем новую карточку в список (ul)
 
@@ -48,6 +60,14 @@ renderCards ();
 
 //открытие попапа редактирования профиля
 function openPopupTypeEdit() {
+    clearValidation(profileForm, {
+        formSelector: ".popup__form",
+        inputSelector: ".popup__input",
+        submitButtonSelector: ".popup__button",
+        inactiveButtonClass: "popup__button_disabled",
+        inputErrorClass: "popup__input_type_error",
+        errorClass: "popup__error_visible"
+      }); 
     inputName.value = profileName.textContent; //присваиваем свойства инпутов в текст разметки
     inputJob.value = profileJob.textContent; //присваиваем свойства инпутов в текст разметки
     openPopups(popupTypeEdit);
@@ -55,6 +75,14 @@ function openPopupTypeEdit() {
 
 //открытие попапа создания новой карточки
 function openPopupNewCard() {
+    clearValidation(cardsForm, {
+        formSelector: ".popup__form",
+        inputSelector: ".popup__input",
+        submitButtonSelector: ".popup__button",
+        inactiveButtonClass: "popup__button_disabled",
+        inputErrorClass: "popup__input_type_error",
+        errorClass: "popup__error_visible"
+      }); 
     openPopups(popupNewCard);
 }
 
@@ -82,6 +110,14 @@ function submitEditProfileForm(evt) {
     profileJob.textContent = inputJob.value;
 
     closePopups(popupTypeEdit);
+    clearValidation(profileForm, {
+        formSelector: ".popup__form",
+        inputSelector: ".popup__input",
+        submitButtonSelector: ".popup__button",
+        inactiveButtonClass: "popup__button_disabled",
+        inputErrorClass: "popup__input_type_error",
+        errorClass: "popup__error_visible"
+      }); 
 };
 
 //добавление новой карточки
@@ -103,6 +139,7 @@ function submitAddCardForm(evt) {
     closePopups(popupNewCard);
 
     cardsForm.reset();
+    clearValidation(cardsForm, validationConfig);
 };
 
 cardsForm.addEventListener('submit', submitAddCardForm); //слушатель формы отправки сабмита новой карточки

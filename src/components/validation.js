@@ -4,7 +4,6 @@ function showInputError(formElement, inputElement, errorMessage, validationConfi
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   // Остальной код такой же
   inputElement.classList.add(validationConfig.inputErrorClass);
-  console.log(inputElement);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(validationConfig.errorClass);
 };
@@ -87,6 +86,7 @@ function setEventListeners(formElement, validationConfig) {
   });
 }; 
 
+// очистить поля 
 export function clearValidation(profileForm, validationConfig) {
   const inputList = Array.from(profileForm.querySelectorAll(validationConfig.inputSelector));
   const buttonElement = profileForm.querySelector(validationConfig.submitButtonSelector);

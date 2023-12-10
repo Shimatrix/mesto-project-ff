@@ -234,7 +234,6 @@ Promise.all([getInfoProfile(), getCards()])
     renderUserInfo(infoProfileData);
     userId = infoProfileData._id;
     renderCards(cardsData);
-    console.log(infoProfileData, cardsData);
 })
 .catch((errorApi) => {
     console.log(`Ой, ошибка: ${errorApi.status}`);

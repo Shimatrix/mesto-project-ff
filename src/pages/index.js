@@ -3,7 +3,6 @@ import {createCard, deleteCard, likeCards} from '../components/card.js';
 import {openPopups, closePopups, closePopupsOverlay} from '../components/modal.js';
 
 import {enableValidation, clearValidation} from '../components/validation.js'
-// import { initialCards } from '../scripts/constants';
 
 import {getInfoProfile, getCards, pushInfoUser, addCardByServer, getNewAvatar} from '../components/api.js';
 
@@ -72,7 +71,6 @@ function renderUserInfo(infoProfileData) {
 function renderCards(cardsData) { //отрисовка карточек из массива
     cardsData.forEach(cardData => {
         const cardElement = createCard(cardData, deleteCard, likeCards, openPopupTypeImage, userId);
-        // cardElement.dataset.cardId = cardData._id;
         addCard(cardElement); //вызываем функцию для добавления карточки в DOM
     })
 }
@@ -168,7 +166,6 @@ function submitEditProfileForm(evt) {
 //добавление новой карточки
 function addNewCards(cardData, deletHandler, likeHandler, imageClickHandler, userId) {
     const newCard = createCard (cardData, deletHandler, likeHandler, imageClickHandler, userId);
-    // newCard.dataset.cardId = cardData._id;
     placesItem.prepend(newCard);
 }
 

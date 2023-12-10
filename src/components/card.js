@@ -14,18 +14,9 @@ export function createCard (cardData, deletHandler, likeHandler, imageClickHandl
     likeNumber.textContent = cardData.likes.length;
     cardImage.alt = cardData.name; //добавили альт из аргумента
     cardImage.src = cardData.link; //добавили ссылку из аргумента
-    
-    // cardElement.querySelector('.card__image').addEventListener('click', function(){ //слушатель открытия попапа картинки
-    //     imageClickHandler(cardData.link, cardData.name);
-    // });
-
-    // likeButton.addEventListener('click', likeHandler);//слушатель лайка
 
     if (deletHandler) {
         deleteButton.addEventListener('click', () => {
-            // const cardElement = event.target.closest('.card');
-            // const cardId = cardElement.dataset.cardId;
-
             deletHandler(cardData._id, cardElement, deletHandler)
         }); //слушатель события удаления карточки на иконку
     }
@@ -65,7 +56,6 @@ export function deleteCard (cardId, cardElement) {
 
 //лайк
 export function likeCards (cardId, likeNumber, likeButton) {
-    // evt.target.classList.toggle('card__like-button_is-active');
     const liked = likeButton.classList.contains('card__like-button_is-active');
     if (liked) {
         deteleLikeByServer(cardId)

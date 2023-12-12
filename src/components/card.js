@@ -7,19 +7,13 @@ export function createCard (cardData, deletHandler, likeHandler, imageClickHandl
     const deleteButton = cardElement.querySelector('.card__delete-button'); //выбрали кнопку удаления карточки
     const likeButton = cardElement.querySelector('.card__like-button'); //кнопка лайка
     const likeNumber = cardElement.querySelector('.card__like-number');//спан с счетчиком лайков
-    const whoIsLiked = cardData.likes.some((like) => like._id === userId);
+    const isLikedByMe = cardData.likes.some((like) => like._id === userId);
     const cardImage = cardElement.querySelector('.card__image');
 
     cardElement.querySelector('.card__title').textContent = cardData.name; //добавили название карточки
     likeNumber.textContent = cardData.likes.length;
     cardImage.alt = cardData.name; //добавили альт из аргумента
     cardImage.src = cardData.link; //добавили ссылку из аргумента
-
-    if (deletHandler) {
-        deleteButton.addEventListener('click', () => {
-            deletHandler(cardData._id, cardElement, deletHandler)
-        }); //слушатель события удаления карточки на иконку
-    }
 
     if (likeHandler) {
         likeButton.addEventListener('click', () => {
@@ -33,12 +27,16 @@ export function createCard (cardData, deletHandler, likeHandler, imageClickHandl
         })
     }
 
-    if (whoIsLiked) {
+    if (isLikedByMe) {
         likeButton.classList.add('card__like-button_is-active');
     }
 
     if (cardData.owner._id !== userId) {
         deleteButton.remove();
+    } else {
+        deleteButton.addEventListener('click', () => {
+            deletHandler(cardData._id, cardElement, deletHandler)
+        }); //слушатель события удаления карточки на иконку
     }
 
     return cardElement; //результат работы функции это возвращение клонированной разметки
@@ -57,23 +55,13 @@ export function deleteCard (cardId, cardElement) {
 //лайк
 export function likeCards (cardId, likeNumber, likeButton) {
     const liked = likeButton.classList.contains('card__like-button_is-active');
-    if (liked) {
-        deteleLikeByServer(cardId)
-        .then((newCardData) => {
-            likeNumber.textContent = newCardData.likes.length;
-            likeButton.classList.remove('card__like-button_is-active');
+    const likeMethod = liked ? deteleLikeByServer : getLikeByServer;
+        likeMethod(cardId) 
+        .then((newCardData) => { 
+            likeNumber.textContent = newCardData.likes.length; 
+            likeButton.classList.toggle('card__like-button_is-active'); 
+        }) 
+        .catch((errorApi) => { 
+            console.log(`Ой, ошибка: ${errorApi.status}`); 
         })
-        .catch((errorApi) => {
-            console.log(`Ой, ошибка: ${errorApi.status}`);
-        })
-    } else {
-        getLikeByServer(cardId)
-        .then((newCardData) => {
-            likeNumber.textContent = newCardData.likes.length;
-            likeButton.classList.add('card__like-button_is-active');
-        })
-        .catch((errorApi) => {
-            console.log(`Ой, ошибка: ${errorApi.status}`);
-        })
-    }
 }

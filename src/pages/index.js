@@ -1,20 +1,20 @@
 import './index.css';
 import {createCard, deleteCard, likeCards} from '../components/card.js';
-import {openPopups, closePopups, closePopupsOverlay} from '../components/modal.js';
+import {openPopup, closePopup, closePopupOverlay} from '../components/modal.js';
 
 import {enableValidation, clearValidation} from '../components/validation.js'
 
 import {getInfoProfile, getCards, pushInfoUser, addCardByServer, getNewAvatar} from '../components/api.js';
 
-// Вызовем функцию валидации
-enableValidation({
+//конфиг валидации
+const validationConfiguration = {
     formSelector: ".popup__form",
     inputSelector: ".popup__input",
     submitButtonSelector: ".popup__button",
     inactiveButtonClass: "popup__button_disabled",
     inputErrorClass: "popup__input_type_error",
     errorClass: "popup__error_visible"
-  });
+  }
   
 export const templateCards = document.querySelector('#card-template').content; //помещаем темплейт в переменную
 const placesItem = document.querySelector('.places__list'); //сохраняем новую карточку в список (ul)
@@ -77,30 +77,16 @@ function renderCards(cardsData) { //отрисовка карточек из м�
 
 //открытие попапа редактирования профиля
 function openPopupTypeEdit() {
-    clearValidation(profileForm, {
-        formSelector: ".popup__form",
-        inputSelector: ".popup__input",
-        submitButtonSelector: ".popup__button",
-        inactiveButtonClass: "popup__button_disabled",
-        inputErrorClass: "popup__input_type_error",
-        errorClass: "popup__error_visible"
-      }); 
+    clearValidation(profileForm, validationConfiguration); 
     inputName.value = profileName.textContent; //присваиваем свойства инпутов в текст разметки
     inputJob.value = profileJob.textContent; //присваиваем свойства инпутов в текст разметки
-    openPopups(popupTypeEdit);
+    openPopup(popupTypeEdit);
 };
 
 //открытие попапа создания новой карточки
 function openPopupNewCard() {
-    clearValidation(cardsForm, {
-        formSelector: ".popup__form",
-        inputSelector: ".popup__input",
-        submitButtonSelector: ".popup__button",
-        inactiveButtonClass: "popup__button_disabled",
-        inputErrorClass: "popup__input_type_error",
-        errorClass: "popup__error_visible"
-      }); 
-    openPopups(popupNewCard);
+    clearValidation(cardsForm, validationConfiguration); 
+    openPopup(popupNewCard);
 }
 
 //функция открытия попапа изображения
@@ -109,26 +95,19 @@ function openPopupTypeImage(cardData) {
     img.alt = cardData.name; //в альт помещаем название картинки из аргумента
     title.textContent = cardData.name; //в текст под картинкой вставляем аргумент с названием 
 
-    openPopups(popupTypeImage);
+    openPopup(popupTypeImage);
 };
 
 //на каждой кнопке закрытия попапа вызвать функцию закрытия попапа
 closePopupButtons.forEach(function(item) {
     const parent = item.closest('.popup');
-    item.addEventListener('click', () => closePopups(parent));
-    parent.addEventListener('click', closePopupsOverlay);//слушатель закрытия на оверлей
+    item.addEventListener('click', () => closePopup(parent));
+    parent.addEventListener('click', closePopupOverlay);//слушатель закрытия на оверлей
 })
 
 function openPopupEditAvatar() {
-    clearValidation(avatarForm, {
-        formSelector: ".popup__form",
-        inputSelector: ".popup__input",
-        submitButtonSelector: ".popup__button",
-        inactiveButtonClass: "popup__button_disabled",
-        inputErrorClass: "popup__input_type_error",
-        errorClass: "popup__error_visible"
-      });
-    openPopups(popupEditAvatar);
+    clearValidation(avatarForm, validationConfiguration);
+    openPopup(popupEditAvatar);
 }
 
 //функция работы с сабмитом редактирования профиля
@@ -144,16 +123,8 @@ function submitEditProfileForm(evt) {
     .then(() => {
         profileName.textContent = newName;
         profileJob.textContent = newJob;
-        closePopups(popupTypeEdit);
+        closePopup(popupTypeEdit);
 
-        clearValidation(profileForm, {
-            formSelector: ".popup__form",
-            inputSelector: ".popup__input",
-            submitButtonSelector: ".popup__button",
-            inactiveButtonClass: "popup__button_disabled",
-            inputErrorClass: "popup__input_type_error",
-            errorClass: "popup__error_visible"
-          }); 
     })
     .catch((errorApi) => {
         console.log(`Ой, ошибка: ${errorApi.status}`);
@@ -184,10 +155,10 @@ function submitAddCardForm(evt) {
     .then((newCardData) => {
         addNewCards(newCardData, deleteCard, likeCards, openPopupTypeImage, userId);
 
-        closePopups(popupNewCard);
+        closePopup(popupNewCard);
 
         cardsForm.reset();
-        clearValidation(cardsForm, validationConfig);
+        clearValidation(cardsForm, validationConfiguration);
     })
     .catch((errorApi) => {
         console.log(`Ой, ошибка: ${errorApi.status}`);
@@ -209,7 +180,7 @@ function submitNewAvatar(evt) {
     getNewAvatar(avatarData)
     .then(() => {
         avatarProfile.style.backgroundImage = `url(${inputAvatarLink.value})`;
-        closePopups(popupEditAvatar);
+        closePopup(popupEditAvatar);
 
         avatarForm.reset();
         clearValidation(avatarForm, validationConfig);
@@ -228,6 +199,9 @@ profileForm.addEventListener('submit', submitEditProfileForm); //слушате�
 profileEditButton.addEventListener('click', openPopupTypeEdit); // слушатель открытия попапа редактирования профиля
 avatarForm.addEventListener('submit', submitNewAvatar) //слушатель отправки формы нового аватара
 buttonEditAvatar.addEventListener('click', openPopupEditAvatar); //слушатель открытия попапа картинки
+
+// Вызовем функцию валидации
+enableValidation(validationConfiguration);
 
 Promise.all([getInfoProfile(), getCards()])
 .then(([infoProfileData, cardsData]) => {

@@ -93,6 +93,7 @@ export function clearValidation(profileForm, validationConfig) {
   inputList.forEach((inputElement) => {
     hideInputError(profileForm, inputElement, validationConfig)
   });
+  profileForm.reset();
   toggleButtonState(inputList, buttonElement, validationConfig);
 }
 

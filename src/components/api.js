@@ -22,7 +22,7 @@ export const getInfoProfile = () => {
     method: 'GET',
     headers: apiConfig.headers
   })
-  .then(res => checkApi(res))
+  .then(checkApi)
 }
 
 //получаем массив карточек 

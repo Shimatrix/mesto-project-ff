@@ -19,7 +19,7 @@ Mesto Project — это интерактивная веб-страница, г�
 
 1. Склонируйте репозиторий:
     ```bash
-    git clone https://github.com/Shimatrix/mesto-project.git
+    git clone https://github.com/Shimatrix/mesto-project-ff.git
     ```
 2. Установите зависимости:
     ```bash
